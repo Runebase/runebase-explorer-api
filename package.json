@@ -10,7 +10,10 @@
     "dev": "NODE_ENV=development npx nodemon --exec 'npx babel-node' --max-old-space-size=4096 src/index.mjs",
     "start": "NODE_ENV=production node --max-old-space-size=4096 dist/index.mjs",
     "build": "rm -rf dist && babel src --out-dir dist --copy-files --keep-file-extension",
-    "lint": "eslint ."
+    "lint": "eslint .",
+    "release:patch": "npm version patch -m 'chore(release): bump to v%s' && npm run build && git add dist/ && git commit -m \"chore(build): release\" --no-verify",
+    "release:minor": "npm version minor -m 'chore(release): bump to v%s' && npm run build && git add dist/ && git commit -m \"chore(build): release\" --no-verify",
+    "release:major": "npm version major -m 'chore(release): bump to v%s' && npm run build && git add dist/ && git commit -m \"chore(build): release\" --no-verify"
   },
   "dependencies": {
     "axios": "^1.13.6",
