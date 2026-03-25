@@ -1,8 +1,6 @@
 import path from 'path'
-import { createRequire } from 'module'
+import { pathToFileURL } from 'url'
 import config from './config/index.mjs'
-
-const require = createRequire(import.meta.url)
 
 const CHAIN = Symbol('runebase.chain')
 const RUNEBASEINFO = Symbol('runebaseinfo')
@@ -22,13 +20,20 @@ const app = {
   },
 
   get runebaseinfo() {
+    return this[RUNEBASEINFO]
+  },
+
+  async initRunebaseinfo() {
     if (!this[RUNEBASEINFO]) {
+      const libPath = pathToFileURL(path.resolve(config.runebaseinfo.path, 'src', 'lib', 'index.mjs')).href
+      const rpcPath = pathToFileURL(path.resolve(config.runebaseinfo.path, 'src', 'rpc', 'index.mjs')).href
+      const lib = await import(libPath)
+      const rpc = await import(rpcPath)
       this[RUNEBASEINFO] = {
-        lib: require(path.resolve(config.runebaseinfo.path, 'lib')),
-        rpc: require(path.resolve(config.runebaseinfo.path, 'rpc'))
+        lib,
+        rpc: rpc.default
       }
     }
-    return this[RUNEBASEINFO]
   },
 
   // These get set during initialization

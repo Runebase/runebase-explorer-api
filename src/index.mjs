@@ -14,6 +14,9 @@ import { initSocketIO } from './socket/index.mjs'
 import { initScheduledTasks } from './schedule/index.mjs'
 
 async function main() {
+  // 0. Initialize runebaseinfo lib (ESM dynamic import)
+  await app.initRunebaseinfo()
+
   // 1. Initialize database
   logger.info('Connecting to database...')
   const db = await initDatabase()
