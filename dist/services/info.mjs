@@ -13,7 +13,8 @@ export class InfoService {
   async getInfo(transaction) {
     let height = this.app.blockchainInfo.tip.height;
     let stakeWeight = JSON.parse(await this.app.redis.hGet(this.app.name, 'stakeweight')) || 0;
-    let feeRate = JSON.parse(await this.app.redis.hGet(this.app.name, 'feerate')).find(item => item.blocks === 10).feeRate || 0.004;
+    let feeRates = JSON.parse(await this.app.redis.hGet(this.app.name, 'feerate'));
+    let feeRate = feeRates?.find(item => item.blocks === 10)?.feeRate || 0.4;
     let dgpInfo = JSON.parse(await this.app.redis.hGet(this.app.name, 'dgpinfo')) || {};
     return {
       height,
@@ -85,22 +86,22 @@ export class InfoService {
     let results = await Promise.all([2, 4, 6, 10, 12, 24].map(blocks => client.estimatesmartfee(blocks)));
     return [{
       blocks: 2,
-      feeRate: results[0].feerate || 0.004
+      feeRate: results[0].feerate || 0.4
     }, {
       blocks: 4,
-      feeRate: results[1].feerate || 0.004
+      feeRate: results[1].feerate || 0.4
     }, {
       blocks: 6,
-      feeRate: results[2].feerate || 0.004
+      feeRate: results[2].feerate || 0.4
     }, {
       blocks: 10,
-      feeRate: results[3].feerate || 0.004
+      feeRate: results[3].feerate || 0.4
     }, {
       blocks: 12,
-      feeRate: results[4].feerate || 0.004
+      feeRate: results[4].feerate || 0.4
     }, {
       blocks: 24,
-      feeRate: results[5].feerate || 0.004
+      feeRate: results[5].feerate || 0.4
     }];
   }
   async getDGPInfo() {
