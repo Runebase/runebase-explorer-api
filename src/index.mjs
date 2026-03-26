@@ -14,8 +14,8 @@ import { initSocketIO } from './socket/index.mjs'
 import { initScheduledTasks } from './schedule/index.mjs'
 
 async function main() {
-  // 0. Initialize runebaseinfo lib (ESM dynamic import)
-  await app.initRunebaseinfo()
+  // 0. Initialize explorer daemon lib (ESM dynamic import)
+  await app.initExplorerDaemon()
 
   // 1. Initialize database
   logger.info('Connecting to database...')
@@ -65,12 +65,12 @@ async function main() {
   // 7. Initialize scheduled tasks
   initScheduledTasks()
 
-  // 8. Start agent (connects to runebaseinfo daemon via socket.io-client)
+  // 8. Start agent (connects to explorer daemon via socket.io-client)
   startAgent(services)
 
   // 9. Start listening
   server.listen(config.port, () => {
-    logger.info(`runebaseinfo-api listening on port ${config.port}`)
+    logger.info(`runebase-explorer-api listening on port ${config.port}`)
   })
 
   // Graceful shutdown
@@ -89,12 +89,12 @@ function startAgent(services) {
   let tip = null
   const namespace = app.io && app.io.of('/')
 
-  const wsUrl = `http://localhost:${config.runebaseinfo.wsPort}`
-  logger.info(`Connecting agent to runebaseinfo at ${wsUrl}...`)
+  const wsUrl = `http://localhost:${config.explorerDaemon.wsPort}`
+  logger.info(`Connecting agent to explorer daemon at ${wsUrl}...`)
   const io = SocketClient(wsUrl)
 
   io.on('connect', () => {
-    logger.info('Agent connected to runebaseinfo')
+    logger.info('Agent connected to explorer daemon')
   })
 
   io.on('tip', (newTip) => {
@@ -177,7 +177,7 @@ function startAgent(services) {
   })
 
   io.on('disconnect', () => {
-    logger.warn('Agent disconnected from runebaseinfo')
+    logger.warn('Agent disconnected from explorer daemon')
   })
 
   // Statistics updates (every 2 minutes)
@@ -313,6 +313,6 @@ async function emitBlockTip(tip, services) {
 }
 
 main().catch((err) => {
-  logger.fatal({ err }, 'Failed to start runebaseinfo-api')
+  logger.fatal({ err }, 'Failed to start runebase-explorer-api')
   process.exit(1)
 })

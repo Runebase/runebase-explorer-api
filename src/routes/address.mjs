@@ -268,7 +268,7 @@ export default (router) => {
   }))
 
   router.get('/address/:address/qrc20-balance-history', asyncHandler(async (req, res) => {
-    const { Address } = app.runebaseinfo.lib
+    const { Address } = app.explorerDaemon.lib
     let tokenAddress = null
     if (req.state.token) {
       if (req.state.token.type === 'qrc20') {
@@ -305,7 +305,7 @@ export default (router) => {
   }))
 
   router.get('/address/:address/qrc20-balance-history/:token', asyncHandler(async (req, res) => {
-    const { Address } = app.runebaseinfo.lib
+    const { Address } = app.explorerDaemon.lib
     let tokenAddress = null
     if (req.state.token) {
       if (req.state.token.type === 'qrc20') {

@@ -11,7 +11,7 @@ export class MiscService {
   async classify(id, transaction) {
     const { Block, Transaction, Contract, Qrc20: QRC20 } = this.db
     const { or: $or, like: $like } = this.db.Sequelize.Op
-    const { Address } = this.app.runebaseinfo.lib
+    const { Address } = this.app.explorerDaemon.lib
     const sql = this.sql
 
     if (/^(0|[1-9]\d{0,9})$/.test(id)) {

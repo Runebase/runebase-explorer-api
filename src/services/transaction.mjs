@@ -15,7 +15,7 @@ export class TransactionService {
     } = this.db
     const { where, col } = this.db.sequelize
     const { in: $in } = this.db.Sequelize.Op
-    const { Address: RawAddress } = this.app.runebaseinfo.lib
+    const { Address: RawAddress } = this.app.explorerDaemon.lib
 
     let tx = await Transaction.findOne({
       where: { id },
@@ -408,7 +408,7 @@ export class TransactionService {
 
   async getRawTransaction(id, transaction) {
     const { Transaction, Witness, TransactionOutput, TransactionInput } = this.db
-    const { Transaction: RawTransaction, Input, Output, OutputScript } = this.app.runebaseinfo.lib
+    const { Transaction: RawTransaction, Input, Output, OutputScript } = this.app.explorerDaemon.lib
 
     let tx = await Transaction.findOne({
       where: { id },
@@ -552,7 +552,7 @@ export class TransactionService {
   }
 
   async getMempoolTransactionAddresses(id, transaction) {
-    const { Address: RawAddress } = this.app.runebaseinfo.lib
+    const { Address: RawAddress } = this.app.explorerDaemon.lib
     const { Address, Transaction, BalanceChange, EvmReceipt: EVMReceipt } = this.db
     let balanceChanges = await BalanceChange.findAll({
       attributes: [],
@@ -592,7 +592,7 @@ export class TransactionService {
   }
 
   async sendRawTransaction(data) {
-    let client = new this.app.runebaseinfo.rpc(this.app.config.runebaseinfo.rpc)
+    let client = new this.app.explorerDaemon.rpc(this.app.config.explorerDaemon.rpc)
     let id = await client.sendrawtransaction(data.toString('hex'))
     return Buffer.from(id, 'hex')
   }
@@ -663,7 +663,7 @@ export class TransactionService {
   }
 
   transformInput(input, index, transaction, { brief }) {
-    const { InputScript, OutputScript } = this.app.runebaseinfo.lib
+    const { InputScript, OutputScript } = this.app.explorerDaemon.lib
     let scriptSig = InputScript.fromBuffer(input.scriptSig, {
       scriptPubKey: OutputScript.fromBuffer(input.scriptPubKey || Buffer.alloc(0)),
       witness: input.witness,
@@ -693,7 +693,7 @@ export class TransactionService {
   }
 
   transformOutput(output, index, { brief }) {
-    const { OutputScript } = this.app.runebaseinfo.lib
+    const { OutputScript } = this.app.explorerDaemon.lib
     let scriptPubKey = OutputScript.fromBuffer(output.scriptPubKey)
     let type = scriptPubKey.isEmpty() ? 'empty' : scriptPubKey.type
     let result = {
@@ -732,7 +732,7 @@ export class TransactionService {
   }
 
   async transformQRC20Transfers(outputs) {
-    const TransferABI = this.app.runebaseinfo.lib.Solidity.qrc20ABIs.find(abi => abi.name === 'Transfer')
+    const TransferABI = this.app.explorerDaemon.lib.Solidity.qrc20ABIs.find(abi => abi.name === 'Transfer')
     let result = []
     for (let output of outputs) {
       if (output.evmReceipt) {
@@ -759,7 +759,7 @@ export class TransactionService {
   }
 
   async transformQRC20UnconfirmedTransfers(outputs) {
-    const { OutputScript, Solidity } = this.app.runebaseinfo.lib
+    const { OutputScript, Solidity } = this.app.explorerDaemon.lib
     const transferABI = Solidity.qrc20ABIs.find(abi => abi.name === 'transfer')
     const { Qrc20: QRC20 } = this.db
     let result = []
@@ -805,7 +805,7 @@ export class TransactionService {
   }
 
   async transformQRC721Transfers(outputs) {
-    const TransferABI = this.app.runebaseinfo.lib.Solidity.qrc20ABIs.find(abi => abi.name === 'Transfer')
+    const TransferABI = this.app.explorerDaemon.lib.Solidity.qrc20ABIs.find(abi => abi.name === 'Transfer')
     let result = []
     for (let output of outputs) {
       if (output.evmReceipt) {
@@ -950,7 +950,7 @@ export class TransactionService {
   }
 
   async getContractTransaction(receiptId, transaction) {
-    const { Address: RawAddress, OutputScript } = this.app.runebaseinfo.lib
+    const { Address: RawAddress, OutputScript } = this.app.explorerDaemon.lib
     const {
       Header, Address, Transaction, TransactionOutput,
       EvmReceipt: EVMReceipt, EvmReceiptLog: EVMReceiptLog, Contract

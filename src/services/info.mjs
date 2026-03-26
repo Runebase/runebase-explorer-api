@@ -72,7 +72,7 @@ export class InfoService {
   }
 
   async getFeeRates() {
-    let client = new this.app.runebaseinfo.rpc(this.app.config.runebaseinfo.rpc)
+    let client = new this.app.explorerDaemon.rpc(this.app.config.explorerDaemon.rpc)
     let results = await Promise.all([2, 4, 6, 10, 12, 24].map(blocks => client.estimatesmartfee(blocks)))
     return [
       { blocks: 2, feeRate: results[0].feerate || 0.004 },
@@ -85,7 +85,7 @@ export class InfoService {
   }
 
   async getDGPInfo() {
-    let client = new this.app.runebaseinfo.rpc(this.app.config.runebaseinfo.rpc)
+    let client = new this.app.explorerDaemon.rpc(this.app.config.explorerDaemon.rpc)
     let info = await client.getdgpinfo()
     return {
       maxBlockSize: info.maxblocksize,

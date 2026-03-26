@@ -6,7 +6,7 @@ export function addressMiddleware() {
     if (!req.params.address) {
       return res.status(404).end()
     }
-    const { Address: RawAddress } = app.runebaseinfo.lib
+    const { Address: RawAddress } = app.explorerDaemon.lib
     const chain = app.chain
     const { Address } = db
     const { in: $in } = db.Sequelize.Op

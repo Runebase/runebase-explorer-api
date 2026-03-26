@@ -22,7 +22,7 @@ export function ratelimit({ duration = 600000, max = 600, whitelist = [] } = {})
       return next()
     }
 
-    let key = `runebaseinfo-api-${ip}`
+    let key = `runebase-explorer-api-${ip}`
     let now = Date.now()
     let entry = store.get(key)
 

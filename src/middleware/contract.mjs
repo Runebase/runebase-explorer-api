@@ -6,7 +6,7 @@ export function contractMiddleware(paramName = 'contract') {
     if (!req.params[paramName]) {
       return res.status(404).end()
     }
-    const { Address: RawAddress } = app.runebaseinfo.lib
+    const { Address: RawAddress } = app.explorerDaemon.lib
     const chain = app.chain
     const { Address, Contract } = db
     const { gte: $gte } = db.Sequelize.Op

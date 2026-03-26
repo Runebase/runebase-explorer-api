@@ -7,7 +7,7 @@ export class ContractService {
   }
 
   async getContractAddresses(list, transaction) {
-    const { Address } = this.app.runebaseinfo.lib
+    const { Address } = this.app.explorerDaemon.lib
     const chain = this.app.chain
     const { Contract } = this.db
 
@@ -120,7 +120,7 @@ export class ContractService {
   }
 
   async getContractTransactionCount(contractAddress, addressIds, fromBlock, toBlock, transaction) {
-    const TransferABI = this.app.runebaseinfo.lib.Solidity.qrc20ABIs.find(abi => abi.name === 'Transfer')
+    const TransferABI = this.app.explorerDaemon.lib.Solidity.qrc20ABIs.find(abi => abi.name === 'Transfer')
     const sql = this.sql
     let topic = Buffer.concat([Buffer.alloc(12), contractAddress])
     let [{ count }] = await this.db.sequelize.query(sql`
@@ -151,7 +151,7 @@ export class ContractService {
   }
 
   async getContractTransactions(contractAddress, addressIds, pagination, fromBlock, toBlock, transaction) {
-    const TransferABI = this.app.runebaseinfo.lib.Solidity.qrc20ABIs.find(abi => abi.name === 'Transfer')
+    const TransferABI = this.app.explorerDaemon.lib.Solidity.qrc20ABIs.find(abi => abi.name === 'Transfer')
     const sql = this.sql
     let { limit, offset, reversed = true } = pagination
     let order = reversed ? 'DESC' : 'ASC'
@@ -204,7 +204,7 @@ export class ContractService {
   }
 
   async getContractBasicTransactions(contractAddress, pagination, fromBlock, toBlock, transaction) {
-    const { Address, OutputScript } = this.app.runebaseinfo.lib
+    const { Address, OutputScript } = this.app.explorerDaemon.lib
     const {
       Header, Transaction, TransactionOutput, Contract, EvmReceipt: EVMReceipt, EvmReceiptLog: EVMReceiptLog
     } = this.db
@@ -297,7 +297,7 @@ export class ContractService {
   }
 
   async callContract(contract, data, sender) {
-    let client = new this.app.runebaseinfo.rpc(this.app.config.runebaseinfo.rpc)
+    let client = new this.app.explorerDaemon.rpc(this.app.config.explorerDaemon.rpc)
     return await client.callcontract(
       contract.toString('hex'),
       data.toString('hex'),
@@ -306,7 +306,7 @@ export class ContractService {
   }
 
   async searchLogs({ contract, topic1, topic2, topic3, topic4 } = {}, pagination, fromBlock, toBlock, transaction) {
-    const { Address } = this.app.runebaseinfo.lib
+    const { Address } = this.app.explorerDaemon.lib
     const { Header, Transaction, EvmReceipt: EVMReceipt, EvmReceiptLog: EVMReceiptLog, Contract } = this.db
     const { in: $in } = this.db.Sequelize.Op
     const sql = this.sql
@@ -402,7 +402,7 @@ export class ContractService {
     }
     const { Contract } = this.db
     const { in: $in } = this.db.Sequelize.Op
-    const { Address } = this.app.runebaseinfo.lib
+    const { Address } = this.app.explorerDaemon.lib
     let result = addresses.map(address => Buffer.compare(address, Buffer.alloc(20)) === 0 ? null : address)
 
     let contracts = await Contract.findAll({

@@ -83,7 +83,7 @@ export class BlockService {
 
   async getRawBlock(arg, transaction) {
     const { Header, Transaction } = this.db
-    const { Header: RawHeader, Block: RawBlock } = this.app.runebaseinfo.lib
+    const { Header: RawHeader, Block: RawBlock } = this.app.explorerDaemon.lib
     let filter
     if (Number.isInteger(arg)) {
       filter = { height: arg }
@@ -307,8 +307,8 @@ export class BlockService {
 
   async getBlockAddressTransactions(height) {
     const { Address, Transaction, BalanceChange, EvmReceipt: EVMReceipt, EvmReceiptLog: EVMReceiptLog, Contract } = this.db
-    const { Address: RawAddress } = this.app.runebaseinfo.lib
-    const TransferABI = this.app.runebaseinfo.lib.Solidity.qrc20ABIs.find(abi => abi.name === 'Transfer')
+    const { Address: RawAddress } = this.app.explorerDaemon.lib
+    const TransferABI = this.app.explorerDaemon.lib.Solidity.qrc20ABIs.find(abi => abi.name === 'Transfer')
     let result = []
     let balanceChanges = await BalanceChange.findAll({
       attributes: [],

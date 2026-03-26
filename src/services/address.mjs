@@ -7,7 +7,7 @@ export class AddressService {
   }
 
   async getAddressSummary(addressIds, p2pkhAddressIds, rawAddresses, transaction) {
-    const { Address } = this.app.runebaseinfo.lib
+    const { Address } = this.app.explorerDaemon.lib
     const { Block } = this.db
     const { balance: balanceService, qrc20: qrc20Service, qrc721: qrc721Service } = this.services
     const { in: $in, gt: $gt } = this.db.Sequelize.Op
@@ -49,7 +49,7 @@ export class AddressService {
   }
 
   async getAddressTransactionCount(addressIds, rawAddresses, fromBlock, toBlock, transaction) {
-    const { Address: RawAddress, Solidity } = this.app.runebaseinfo.lib
+    const { Address: RawAddress, Solidity } = this.app.explorerDaemon.lib
     const TransferABI = Solidity.qrc20ABIs.find(abi => abi.name === 'Transfer')
     const { Address } = this.db
     const sql = this.sql
@@ -81,7 +81,7 @@ export class AddressService {
   }
 
   async getAddressTransactions(addressIds, rawAddresses, pagination, fromBlock, toBlock, transaction) {
-    const { Address: RawAddress, Solidity } = this.app.runebaseinfo.lib
+    const { Address: RawAddress, Solidity } = this.app.explorerDaemon.lib
     const TransferABI = Solidity.qrc20ABIs.find(abi => abi.name === 'Transfer')
     const { Address } = this.db
     const sql = this.sql
@@ -214,7 +214,7 @@ export class AddressService {
   }
 
   async getAddressQRC20TokenTransactionCount(rawAddresses, token, transaction) {
-    const { Address, Solidity } = this.app.runebaseinfo.lib
+    const { Address, Solidity } = this.app.explorerDaemon.lib
     const TransferABI = Solidity.qrc20ABIs.find(abi => abi.name === 'Transfer')
     const { EvmReceiptLog: EVMReceiptLog } = this.db
     const { or: $or, in: $in } = this.db.Sequelize.Op
@@ -235,7 +235,7 @@ export class AddressService {
   }
 
   async getAddressQRC20TokenTransactions(rawAddresses, token, pagination, transaction) {
-    const { Address, Solidity } = this.app.runebaseinfo.lib
+    const { Address, Solidity } = this.app.explorerDaemon.lib
     const TransferABI = Solidity.qrc20ABIs.find(abi => abi.name === 'Transfer')
     const sql = this.sql
     let { limit, offset, reversed = true } = pagination
@@ -304,7 +304,7 @@ export class AddressService {
   }
 
   async getAddressQRC20TokenMempoolTransactions(rawAddresses, token, transaction) {
-    const { Address: RawAddress, OutputScript, Solidity } = this.app.runebaseinfo.lib
+    const { Address: RawAddress, OutputScript, Solidity } = this.app.explorerDaemon.lib
     const transferABI = Solidity.qrc20ABIs.find(abi => abi.name === 'transfer')
     const { Address, Transaction, TransactionOutput, Contract, EvmReceipt: EVMReceipt } = this.db
     let hexAddresses = rawAddresses

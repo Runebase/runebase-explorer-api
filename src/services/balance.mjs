@@ -329,7 +329,7 @@ export class BalanceService {
 
   async getDelegationsForStaker(address) {
     try {
-      let client = new this.app.runebaseinfo.rpc(this.app.config.runebaseinfo.rpc)
+      let client = new this.app.explorerDaemon.rpc(this.app.config.explorerDaemon.rpc)
       let info = await client.getdelegationsforstaker(address)
       return info
     } catch (error) {
@@ -339,7 +339,7 @@ export class BalanceService {
   }
 
   async getDelegationInfoForAddress(address) {
-    let client = new this.app.runebaseinfo.rpc(this.app.config.runebaseinfo.rpc)
+    let client = new this.app.explorerDaemon.rpc(this.app.config.explorerDaemon.rpc)
     let info = await client.getdelegationinfoforaddress(address)
     return info
   }

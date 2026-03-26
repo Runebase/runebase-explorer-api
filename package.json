@@ -1,5 +1,5 @@
 {
-  "name": "runebaseinfo-api",
+  "name": "runebase-explorer-api",
   "version": "1.0.0",
   "private": true,
   "description": "Runebase blockchain explorer API",

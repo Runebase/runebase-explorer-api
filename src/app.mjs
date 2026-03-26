@@ -3,10 +3,10 @@ import { pathToFileURL } from 'url'
 import config from './config/index.mjs'
 
 const CHAIN = Symbol('runebase.chain')
-const RUNEBASEINFO = Symbol('runebaseinfo')
+const EXPLORER_DAEMON = Symbol('explorerDaemon')
 
 const app = {
-  name: 'runebaseinfo-api',
+  name: 'runebase-explorer-api',
   config,
   blockchainInfo: {
     tip: null
@@ -14,22 +14,22 @@ const app = {
 
   get chain() {
     if (!this[CHAIN]) {
-      this[CHAIN] = this.runebaseinfo.lib.Chain.get(config.runebase.chain)
+      this[CHAIN] = this.explorerDaemon.lib.Chain.get(config.runebase.chain)
     }
     return this[CHAIN]
   },
 
-  get runebaseinfo() {
-    return this[RUNEBASEINFO]
+  get explorerDaemon() {
+    return this[EXPLORER_DAEMON]
   },
 
-  async initRunebaseinfo() {
-    if (!this[RUNEBASEINFO]) {
-      const libPath = pathToFileURL(path.resolve(config.runebaseinfo.path, 'src', 'lib', 'index.mjs')).href
-      const rpcPath = pathToFileURL(path.resolve(config.runebaseinfo.path, 'src', 'rpc', 'index.mjs')).href
+  async initExplorerDaemon() {
+    if (!this[EXPLORER_DAEMON]) {
+      const libPath = pathToFileURL(path.resolve(config.explorerDaemon.path, 'src', 'lib', 'index.mjs')).href
+      const rpcPath = pathToFileURL(path.resolve(config.explorerDaemon.path, 'src', 'rpc', 'index.mjs')).href
       const lib = await import(libPath)
       const rpc = await import(rpcPath)
-      this[RUNEBASEINFO] = {
+      this[EXPLORER_DAEMON] = {
         lib,
         rpc: rpc.default
       }

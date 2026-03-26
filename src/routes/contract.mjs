@@ -180,7 +180,7 @@ export default (router) => {
   }))
 
   router.get('/contract/:contract/call', asyncHandler(async (req, res) => {
-    const { Address } = app.runebaseinfo.lib
+    const { Address } = app.explorerDaemon.lib
     let { data, sender } = req.query
     if (req.state.contract.vm !== 'evm') return res.status(400).end()
     if (!/^([0-9a-f]{2})+$/i.test(data)) return res.status(400).end()

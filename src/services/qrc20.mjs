@@ -54,7 +54,7 @@ export class QRC20Service {
     if (hexAddresses.length === 0) {
       return []
     }
-    const { OutputScript, Solidity } = this.app.runebaseinfo.lib
+    const { OutputScript, Solidity } = this.app.explorerDaemon.lib
     const transferABI = Solidity.qrc20ABIs.find(abi => abi.name === 'transfer')
     const {
       Address, TransactionOutput,
@@ -177,7 +177,7 @@ export class QRC20Service {
   }
 
   async getQRC20Balance(rawAddresses, tokenAddress, transaction) {
-    const { Address: RawAddress, OutputScript, Solidity } = this.app.runebaseinfo.lib
+    const { Address: RawAddress, OutputScript, Solidity } = this.app.explorerDaemon.lib
     const transferABI = Solidity.qrc20ABIs.find(abi => abi.name === 'transfer')
     const {
       Address, TransactionOutput,
@@ -264,7 +264,7 @@ export class QRC20Service {
   }
 
   async getQRC20BalanceHistory(addresses, tokenAddress, pagination, transaction) {
-    const TransferABI = this.app.runebaseinfo.lib.Solidity.qrc20ABIs.find(abi => abi.name === 'Transfer')
+    const TransferABI = this.app.explorerDaemon.lib.Solidity.qrc20ABIs.find(abi => abi.name === 'Transfer')
     const sql = this.sql
     const {
       Header, Transaction,
@@ -475,7 +475,7 @@ export class QRC20Service {
   }
 
   async getAllQRC20TokenTransactions(pagination, transaction) {
-    const TransferABI = this.app.runebaseinfo.lib.Solidity.qrc20ABIs.find(abi => abi.name === 'Transfer')
+    const TransferABI = this.app.explorerDaemon.lib.Solidity.qrc20ABIs.find(abi => abi.name === 'Transfer')
     const sql = this.sql
     let { limit, offset, reversed = true } = pagination
     let order = reversed ? 'DESC' : 'ASC'
@@ -540,7 +540,7 @@ export class QRC20Service {
   }
 
   async getQRC20TokenTransactions(contractAddress, pagination, fromBlock, toBlock, transaction) {
-    const TransferABI = this.app.runebaseinfo.lib.Solidity.qrc20ABIs.find(abi => abi.name === 'Transfer')
+    const TransferABI = this.app.explorerDaemon.lib.Solidity.qrc20ABIs.find(abi => abi.name === 'Transfer')
     const { EvmReceiptLog: EVMReceiptLog } = this.db
     const sql = this.sql
     let { limit, offset, reversed = true } = pagination
@@ -632,7 +632,7 @@ export class QRC20Service {
   }
 
   async updateQRC20Statistics() {
-    const TransferABI = this.app.runebaseinfo.lib.Solidity.qrc20ABIs.find(abi => abi.name === 'Transfer')
+    const TransferABI = this.app.explorerDaemon.lib.Solidity.qrc20ABIs.find(abi => abi.name === 'Transfer')
     const { Qrc20: QRC20, Qrc20Statistics: QRC20Statistics } = this.db
     const sql = this.sql
     let transaction = await this.db.sequelize.transaction()
